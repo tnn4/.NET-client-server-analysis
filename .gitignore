@@ -1,0 +1,9 @@
+# * matches anything except slashes(/)
+# **/foo = match file or directory foo anywhere
+# **/foo/bar matches any file or directoy bar that is under directory foo
+# a/**/b match zero or more directories in between a/b, a/x/b, a/x/y/b
+
+
+*/obj
+*/.vs
+bin

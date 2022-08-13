@@ -1,0 +1,16 @@
+{
+  "Version": 1,
+  "ProjectMap": {
+    "403dd663-b24d-4cb7-8afd-c24343d773af": {
+      "ProjectGuid": "403dd663-b24d-4cb7-8afd-c24343d773af",
+      "DisplayName": "client",
+      "ColorIndex": 0
+    },
+    "5d722953-e476-4bfb-ad5c-eee9cc326cee": {
+      "ProjectGuid": "5d722953-e476-4bfb-ad5c-eee9cc326cee",
+      "DisplayName": "Solution Items",
+      "ColorIndex": 1
+    }
+  },
+  "NextColorIndex": 2
+}

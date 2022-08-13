@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<SourceFileCollection xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Profile>Reach</Profile>
+  <Platform>DesktopGL</Platform>
+  <Config />
+  <SourceFiles>
+    <File>C:/Users/dev/proj/games/multiplayer/lidgren-client-server-sample/client/Content/c1.png</File>
+    <File>C:/Users/dev/proj/games/multiplayer/lidgren-client-server-sample/client/Content/c2.png</File>
+    <File>C:/Users/dev/proj/games/multiplayer/lidgren-client-server-sample/client/Content/c3.png</File>
+    <File>C:/Users/dev/proj/games/multiplayer/lidgren-client-server-sample/client/Content/c4.png</File>
+    <File>C:/Users/dev/proj/games/multiplayer/lidgren-client-server-sample/client/Content/c5.png</File>
+    <File>C:/Users/dev/proj/games/multiplayer/lidgren-client-server-sample/client/Content/sprites/characters/player.png</File>
+    <File>C:/Users/dev/proj/games/multiplayer/lidgren-client-server-sample/client/Content/sprites/characters/slime.png</File>
+    <File>C:/Users/dev/proj/games/multiplayer/lidgren-client-server-sample/client/Content/sprites/objects/chest_01.png</File>
+    <File>C:/Users/dev/proj/games/multiplayer/lidgren-client-server-sample/client/Content/sprites/objects/objects.png</File>
+    <File>C:/Users/dev/proj/games/multiplayer/lidgren-client-server-sample/client/Content/sprites/particles/dust_particles_01.png</File>
+    <File>C:/Users/dev/proj/games/multiplayer/lidgren-client-server-sample/client/Content/sprites/tilesets/decor_16x16.png</File>
+    <File>C:/Users/dev/proj/games/multiplayer/lidgren-client-server-sample/client/Content/sprites/tilesets/decor_8x8.png</File>
+    <File>C:/Users/dev/proj/games/multiplayer/lidgren-client-server-sample/client/Content/sprites/tilesets/fences.png</File>
+    <File>C:/Users/dev/proj/games/multiplayer/lidgren-client-server-sample/client/Content/sprites/tilesets/grass.png</File>
+    <File>C:/Users/dev/proj/games/multiplayer/lidgren-client-server-sample/client/Content/sprites/tilesets/plains.png</File>
+    <File>C:/Users/dev/proj/games/multiplayer/lidgren-client-server-sample/client/Content/sprites/tilesets/water_decorations.png</File>
+  </SourceFiles>
+  <DestFiles>
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+  </DestFiles>
+</SourceFileCollection>
