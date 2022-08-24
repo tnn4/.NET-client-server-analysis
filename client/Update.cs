@@ -10,7 +10,7 @@ namespace Client
     internal partial class Update : IUpdateable
     {
 
-        private GameTime _game_time;
+        protected GameTime _game_time;
 
         public Update(GameTime game_time)
         {

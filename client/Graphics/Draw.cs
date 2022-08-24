@@ -5,20 +5,28 @@ using System.Text;
 using System.Threading.Tasks;
 
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace Client
 {
     internal partial class Draw : IDrawable
     {
-       private GameTime _game_time;
+        protected GameTime _game_time;
+        protected SpriteBatch _sb;
+        protected GraphicsDeviceManager _gdm;
+        protected GraphicsDevice _gd;
 
-        public Draw(GameTime game_time)
+        public Draw(){}
+        public Draw(GameTime game_time, SpriteBatch sb, GraphicsDeviceManager gdm)
         {
             _game_time = game_time;
-        }
+            _sb = sb;
+            _gdm = gdm;
+            _gd = _gdm.GraphicsDevice;
+    }
         void IDrawable.Draw(GameTime game_time)
         {
-            throw new NotImplementedException();
+            // throw new NotImplementedException();
         }
     }
 
