@@ -3,7 +3,7 @@
 using Microsoft.Xna.Framework;
 
 
-namespace client
+namespace Client
 {
     public static class Program
     {

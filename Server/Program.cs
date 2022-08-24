@@ -150,7 +150,7 @@ namespace XnaGameServer
 				Thread.Sleep(1);
 			}
 
-			server.Shutdown("app exiting");
+			server.Shutdown("Server shutting down");
 		}
 	}
 }

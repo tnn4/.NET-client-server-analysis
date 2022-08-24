@@ -6,27 +6,29 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
 using Lidgren.Network;
+using Client;
 
-namespace client
+namespace Client
 {
 	/// <summary>
 	/// This is the main type for your game
 	/// </summary>
 	public class Game1 : Microsoft.Xna.Framework.Game
 	{
-		GraphicsDeviceManager graphics;
-		SpriteBatch spriteBatch;
 
-		Texture2D[] textures;
+		Graphics _graphics = new Graphics();
+		Textures _textures = new Textures();
+
 		Dictionary<long, Vector2> positions = new Dictionary<long, Vector2>();
+		
 		NetClient client;
-		int port_wrong = 142142; // screwed up here, no wonder it gave ArgumentOutOfRangeException
-		int port_good = 14242;
+		
+		int server_port = 14242;
 
         #region Game1
         public Game1()
 		{
-			graphics = new GraphicsDeviceManager(this);
+			_graphics.dm = new GraphicsDeviceManager(this);
 			Content.RootDirectory = "Content";
 
 			NetPeerConfiguration config = new NetPeerConfiguration("xnaapp");
@@ -41,7 +43,8 @@ namespace client
 		protected override void Initialize()
 		{
 			Console.WriteLine("Client initialized.");
-			client.DiscoverLocalPeers(port_good);
+			client.DiscoverLocalPeers(server_port);
+			Console.WriteLine($"Server started on port: {server_port}");
 			// Console.WriteLine($"Found peer at {port}");
 			base.Initialize();
 		}
@@ -50,10 +53,13 @@ namespace client
         #region LoadContent
         protected override void LoadContent()
 		{
-			spriteBatch = new SpriteBatch(GraphicsDevice);
-			textures = new Texture2D[5];
+			_graphics.sb = new SpriteBatch(GraphicsDevice);
+			_textures.textures_list = new List<Texture2D>();
+			
 			for (int i = 0; i < 5; i++)
-				textures[i] = Content.Load<Texture2D>("c" + (i + 1));
+				_textures.textures_list.Add( Content.Load<Texture2D>("sprites/c" + (i + 1)) );
+
+			_textures.textures_list.Add(Content.Load<Texture2D>( "sprites/characters/player" ));
 		}
         #endregion
 
@@ -65,11 +71,6 @@ namespace client
 			//
 			int xinput = 0;
 			int yinput = 0;
-
-			/*
-			SByte x_in_byte = 0; //SByte/signed byte range = [-128, 127]
-			SByte y_in_byte = 0;
-			*/
 
 			KeyboardState keyState = Keyboard.GetState();
 
@@ -132,19 +133,19 @@ namespace client
 		{
 			GraphicsDevice.Clear(Color.CornflowerBlue);
 
-			spriteBatch.Begin(SpriteSortMode.Texture, BlendState.AlphaBlend);
+			_graphics.sb.Begin(SpriteSortMode.Texture, BlendState.AlphaBlend);
 
 			// draw all players
 			foreach (var kvp in positions)
 			{
 				// use player unique identifier to choose an image
-				int num = Math.Abs((int)kvp.Key) % textures.Length;
+				int num = Math.Abs((int)kvp.Key) % _textures.textures_list.Count;
 
 				// draw player
-				spriteBatch.Draw(textures[num], kvp.Value, Color.White);
+				_graphics.sb.Draw(_textures.textures_list[num], kvp.Value, Color.White);
 			}
 
-			spriteBatch.End();
+			_graphics.sb.End();
 
 			base.Draw(gameTime);
 		}
