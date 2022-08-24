@@ -56,8 +56,8 @@ namespace Client.Graphics
 
         public void make_white_rect(int x, int y)
         {
-            whiteRect = new Texture2D(_gd, x, y);
-            whiteRect.SetData(new[] { Color.White });
+            _whiteRect = new Texture2D(_gd, x, y);
+            _whiteRect.SetData(new[] { Color.White });
         }
     }
 }

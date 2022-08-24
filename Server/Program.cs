@@ -2,12 +2,19 @@
 using System.Threading;
 
 using Lidgren.Network;
+using Server;
 
 namespace XnaGameServer
 {
 	class Program
 	{
 		static void Main(string[] args)
+		{
+			Server.Server server = new Server.Server();
+			server.init_server();
+			server.run_server();
+		}
+		static void Main_(string[] args)
 		{
 			// Configuration
 			NetPeerConfiguration config = new NetPeerConfiguration("xnaapp");
@@ -88,24 +95,17 @@ namespace XnaGameServer
 
 							// Read 1 signed byte
 							/*
-							SByte xinput2 = msg.ReadSByte();
-							SByte yinput2 = msg.ReadSByte();
+							sbyte xinput2 = msg.ReadSByte();
+							sbyte yinput2 = msg.ReadSByte();
 							*/
 
 							int[] pos = msg.SenderConnection.Tag as int[];
 							// SByte[] pos = msg.SenderConnection.Tag as SByte[];
 
 							// fancy movement logic goes here; we just append input to position
-
-							 
 							pos[0] += xinput;
 							pos[1] += yinput;
-							
 
-							/*
-							pos[0] += xinput2;
-							pos[1] += yinput2;
-							*/
 							break;
 					}
 

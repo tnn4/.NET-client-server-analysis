@@ -11,32 +11,55 @@ using Lidgren.Network;
 
 namespace Server;
 
+/// <summary>
+/// 
+/// </summary>
 internal class Server
 {
-    NetPeerConfiguration? config;
+    NetPeerConfiguration _config;
     NetServer server;
-    private int _port;
+    private int _port = 14242;
+    private int _sleep_time = 10;
     private int _tick_rate = 30;
+    private double _tick_time;
     double nextSendUpdates;
+    Position_sbyte _pos_sbyte;
+
+    public Server()
+    {
+        Console.WriteLine("Constructor called");
+        // NetPeerConfiguration _config = new NetPeerConfiguration("xnaapp"); // this was dropped after instantiation
+        _config = new NetPeerConfiguration("xnaapp");
+        if (_config == null)
+        {
+            Console.WriteLine("ERROR: config null");
+            return;
+        }
+        server = new NetServer(_config);
+        if (server == null)
+        {
+            Console.WriteLine("ERROR: config null");
+            return;
+        }
+
+    }
 
     public void init_server()
     {
         // Configuration
-        NetPeerConfiguration config = new NetPeerConfiguration("xnaapp");
-        config.EnableMessageType(NetIncomingMessageType.DiscoveryRequest);
-        config.Port = 14242;
+        _config.EnableMessageType(NetIncomingMessageType.DiscoveryRequest);
+        _config.Port = 14242;
+        _tick_time = (1 / _tick_rate);
         // You can simulate latency with netpeer configuration
         // config.SimulatedRandomLatency = 1;// simulated latency in seconds
     }
 
     public void run_server()
     {
-        // Create and Start Server
-        NetServer server = new NetServer(config);
         server.Start();
-
         // schedule initial sending of position updates
         double nextSendUpdates = NetTime.Now;
+        server_loop();
     }
 
     private void server_loop()
@@ -56,7 +79,7 @@ internal class Server
             run_tick();
 
             // sleep to allow other processes to run smoothly
-            Thread.Sleep(1);
+            Thread.Sleep(_sleep_time);
         }
     }
 
@@ -64,20 +87,17 @@ internal class Server
         // Figure out what to do depending on the message type
         switch (msg.MessageType)
         {
+            // Server received a discovery request from a client;
+            // send a discovery response (with no extra data attached)
             case NetIncomingMessageType.DiscoveryRequest:
-                //
-                // Server received a discovery request from a client; send a discovery response (with no extra data attached)
-                //
                 server.SendDiscoveryResponse(null, msg.SenderEndPoint);
                 break;
             // Debug Verbose
             case NetIncomingMessageType.VerboseDebugMessage:
-
             // Debug
             case NetIncomingMessageType.DebugMessage:
-
+            // Warning
             case NetIncomingMessageType.WarningMessage:
-
             // Error
             case NetIncomingMessageType.ErrorMessage:
                 //
@@ -91,11 +111,8 @@ internal class Server
                 NetConnectionStatus status = (NetConnectionStatus)msg.ReadByte();
                 if (status == NetConnectionStatus.Connected)
                 {
-                    //
                     // A new player just connected!
-                    //
                     Console.WriteLine(NetUtility.ToHexString(msg.SenderConnection.RemoteUniqueIdentifier) + " connected!");
-
                     // randomize his position and store in connection tag
                     msg.SenderConnection.Tag = new int[] {
                                 NetRandom.Instance.Next(10, 100),
@@ -107,24 +124,21 @@ internal class Server
 
             // Do logic from client data input 
             case NetIncomingMessageType.Data:
-                //
-                // The client sent input to the server
 
-                //
-                // Original code: read ints = 4 bytes
+                // The client sent input to the server
+                _pos_sbyte.x = 0;
+                _pos_sbyte.y = 0;
+                // ints = 4 bytes
                 int xinput = msg.ReadInt32();
                 int yinput = msg.ReadInt32();
-
-                // Read 1 signed byte
-                /*				SByte xinput2 = msg.ReadSByte();				SByte yinput2 = msg.ReadSByte();				*/
+                msg.ReadSByte();
 
                 int[] pos = msg.SenderConnection.Tag as int[];
-                // SByte[] pos = msg.SenderConnection.Tag as SByte[];
 
                 // fancy movement logic goes here; we just append input to position
                 pos[0] += xinput;
                 pos[1] += yinput;
-
+                // pos[2] += yinput; this is legal
                 break;
         }
 
@@ -134,7 +148,8 @@ internal class Server
     private void run_tick()
     {
 #if DEBUG
-        Debug.WriteLine("tick()");
+        // Debug.WriteLine("tick()");
+        Console.WriteLine("tick()");
 #endif
         //
         // send position updates 30 times per second // NOTE: allow updates per second(ticks) to be configured
@@ -142,9 +157,8 @@ internal class Server
         double now = NetTime.Now;
         if (now > nextSendUpdates)
         {
-            // Yes, it's time to send position updates
-
-            // for each player...
+            // Yes, it's time to send position updates for each player...
+            // om = outmessage
             foreach (NetConnection player in server.Connections)
             {
                 // ... send information about every other player (actually including self)
@@ -169,8 +183,32 @@ internal class Server
             }
 
             // schedule next update
-            nextSendUpdates += (1.0 / 30.0); // next update at 0.034 seconds
+            nextSendUpdates += (1.0 / 30.0); // next update at 0.034 seconds or 34 ms
         }
     }
 
+    public void set_port(int port)
+    {
+        _port = port;
+    }
+
+    public void shutdown()
+    {
+        server.Shutdown("Server shutting down");
+    }
+
+}
+
+public struct Position_sbyte
+{
+    public sbyte x
+    {
+        set;
+        get;
+    }
+    public sbyte y
+    {
+        set;
+        get;
+    }
 }

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Client
 {
-    public class Graphics
+    public class Graphics_
     {
         public GraphicsDeviceManager dm;
         public SpriteBatch sb;

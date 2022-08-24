@@ -16,7 +16,7 @@ namespace Client
 	public class Game1 : Microsoft.Xna.Framework.Game
 	{
 
-		Graphics _graphics = new Graphics();
+		Graphics_ _graphics = new Graphics_();
 		Textures _textures = new Textures();
 
 		Dictionary<long, Vector2> positions = new Dictionary<long, Vector2>();
@@ -72,6 +72,9 @@ namespace Client
 			int xinput = 0;
 			int yinput = 0;
 
+			sbyte x_byte = 0;
+			sbyte y_byte = 0;
+
 			KeyboardState keyState = Keyboard.GetState();
 
 			// exit game if escape or Back is pressed
@@ -100,6 +103,7 @@ namespace Client
 				NetOutgoingMessage om = client.CreateMessage();
 				om.Write(xinput); // very inefficient to send a full Int32 (4 bytes) but we'll use this for simplicity // What's a more efficient way ?
 				om.Write(yinput);
+				om.Write(x_byte);
 				client.SendMessage(om, NetDeliveryMethod.Unreliable);
 			}
 

@@ -19,7 +19,7 @@ namespace Client
 
         void IUpdateable.Update(GameTime game_time)
         {
-            throw new NotImplementedException();
+            // throw new NotImplementedException();
         }
     }
 
