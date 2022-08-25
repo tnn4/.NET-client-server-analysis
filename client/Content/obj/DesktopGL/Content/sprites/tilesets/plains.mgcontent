@@ -3,7 +3,7 @@
   <SourceFile>D:/projects/net/lidgren-client-server-sample/Client/Content/sprites/tilesets/plains.png</SourceFile>
   <SourceTime>2022-08-13T16:57:42-05:00</SourceTime>
   <DestFile>D:/projects/net/lidgren-client-server-sample/Client/Content/bin/DesktopGL/Content/sprites/tilesets/plains.xnb</DestFile>
-  <DestTime>2022-08-24T11:35:22-05:00</DestTime>
+  <DestTime>2022-08-24T21:41:40-05:00</DestTime>
   <Importer>TextureImporter</Importer>
   <ImporterTime>2020-08-10T11:17:54-05:00</ImporterTime>
   <Processor>TextureProcessor</Processor>

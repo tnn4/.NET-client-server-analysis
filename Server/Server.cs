@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Diagnostics;
 
 using Lidgren.Network;
+using Util;
 
 namespace Server;
 
@@ -20,13 +21,15 @@ internal class Server
     NetServer server;
     private int _port = 14242;
     private int _sleep_time = 10;
-    private int _tick_rate = 30;
+    private int _tick_rate = 30; // n frames per second
     private double _tick_time;
     double nextSendUpdates;
     Position_sbyte _pos_sbyte;
+    SByteBufferxy _bxy;
 
     public Server()
     {
+        _tick_time = (1.0 / _tick_rate);
         Console.WriteLine("Constructor called");
         // NetPeerConfiguration _config = new NetPeerConfiguration("xnaapp"); // this was dropped after instantiation
         _config = new NetPeerConfiguration("xnaapp");
@@ -122,23 +125,26 @@ internal class Server
 
                 break;
 
+            // The client sent input to the server
             // Do logic from client data input 
             case NetIncomingMessageType.Data:
 
-                // The client sent input to the server
-                _pos_sbyte.x = 0;
-                _pos_sbyte.y = 0;
+                on_data_received();
+
                 // ints = 4 bytes
                 int xinput = msg.ReadInt32();
                 int yinput = msg.ReadInt32();
-                msg.ReadSByte();
+                //sbyte x_in_b = msg.ReadSByte();
+                //sbyte y_in_b = msg.ReadSByte();
 
                 int[] pos = msg.SenderConnection.Tag as int[];
-
+                //sbyte[] pos = msg.SenderConnection.Tag as sbyte[];
                 // fancy movement logic goes here; we just append input to position
                 pos[0] += xinput;
                 pos[1] += yinput;
-                // pos[2] += yinput; this is legal
+ 
+                //pos[0] += x_in_b;
+                //pos[1] += y_in_b;
                 break;
         }
 
@@ -152,8 +158,8 @@ internal class Server
         Console.WriteLine("tick()");
 #endif
         //
-        // send position updates 30 times per second // NOTE: allow updates per second(ticks) to be configured
-        //
+        // send position updates 30 times per second 
+        // NOTE: allow updates per second(ticks) to be configured
         double now = NetTime.Now;
         if (now > nextSendUpdates)
         {
@@ -165,25 +171,30 @@ internal class Server
                 foreach (NetConnection otherPlayer in server.Connections)
                 {
                     // send position update about 'otherPlayer' to 'player'
-                    NetOutgoingMessage om = server.CreateMessage();
+                    NetOutgoingMessage outBox = server.CreateMessage();
 
                     // write who this position is for
-                    om.Write(otherPlayer.RemoteUniqueIdentifier);
+                    outBox.Write(otherPlayer.RemoteUniqueIdentifier);
 
                     if (otherPlayer.Tag == null)
-                        otherPlayer.Tag = new int[2];
+                        otherPlayer.Tag = new int[2]; //int[2]
 
                     int[] pos = otherPlayer.Tag as int[];
-                    om.Write(pos[0]);
-                    om.Write(pos[1]);
 
+                    outBox.Write(pos[0]);
+                    outBox.Write(pos[1]);
+
+                    //sbyte[] pos_b = otherPlayer.Tag as sbyte[];
+                    //om.Write(pos_b[0]);
+                    //om.Write(pos_b[1]);
                     // send message
-                    server.SendMessage(om, player, NetDeliveryMethod.Unreliable);
+                    server.SendMessage(outBox, player, NetDeliveryMethod.Unreliable);
                 }
             }
 
             // schedule next update
-            nextSendUpdates += (1.0 / 30.0); // next update at 0.034 seconds or 34 ms
+            // nextSendUpdates += (1.0 / 30.0); // e.g. next update in 0.034 seconds or 34 ms
+            nextSendUpdates += _tick_time;
         }
     }
 
@@ -197,6 +208,10 @@ internal class Server
         server.Shutdown("Server shutting down");
     }
 
+    public void on_data_received()
+    {
+
+    }
 }
 
 public struct Position_sbyte

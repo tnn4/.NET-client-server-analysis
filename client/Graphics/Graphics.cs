@@ -10,7 +10,7 @@ namespace Client
 {
     public class Graphics_
     {
-        public GraphicsDeviceManager dm;
-        public SpriteBatch sb;
+        public GraphicsDeviceManager _gdm;
+        public SpriteBatch _sb;
     }
 }

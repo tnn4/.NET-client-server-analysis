@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework.Input;
 
 using Lidgren.Network;
 using Client;
+using Util;
 
 namespace Client
 {
@@ -18,17 +19,16 @@ namespace Client
 
 		Graphics_ _graphics = new Graphics_();
 		Textures _textures = new Textures();
-
 		Dictionary<long, Vector2> positions = new Dictionary<long, Vector2>();
-		
 		NetClient client;
-		
+		SByteBufferxy _bxy;
+
 		int server_port = 14242;
 
         #region Game1
         public Game1()
 		{
-			_graphics.dm = new GraphicsDeviceManager(this);
+			_graphics._gdm = new GraphicsDeviceManager(this);
 			Content.RootDirectory = "Content";
 
 			NetPeerConfiguration config = new NetPeerConfiguration("xnaapp");
@@ -53,11 +53,11 @@ namespace Client
         #region LoadContent
         protected override void LoadContent()
 		{
-			_graphics.sb = new SpriteBatch(GraphicsDevice);
+			_graphics._sb = new SpriteBatch(GraphicsDevice);
 			_textures.textures_list = new List<Texture2D>();
 			
 			for (int i = 0; i < 5; i++)
-				_textures.textures_list.Add( Content.Load<Texture2D>("sprites/c" + (i + 1)) );
+				_textures.textures_list.Add( Content.Load<Texture2D>("sprites/characters/c" + (i + 1)) );
 
 			_textures.textures_list.Add(Content.Load<Texture2D>( "sprites/characters/player" ));
 		}
@@ -72,57 +72,72 @@ namespace Client
 			int xinput = 0;
 			int yinput = 0;
 
-			sbyte x_byte = 0;
-			sbyte y_byte = 0;
+			//sbyte x_byte = 0;
+			//sbyte y_byte = 0;
 
+			// Controller.handle_player_input();
 			KeyboardState keyState = Keyboard.GetState();
 
 			// exit game if escape or Back is pressed
-			if (keyState.IsKeyDown(Keys.Escape) || GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
+			if (keyState.IsKeyDown(Keys.Escape) 
+				|| GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
 				this.Exit();
 
 			// use arrows or dpad to move avatar
 			// >
-			if (GamePad.GetState(PlayerIndex.One).DPad.Left == ButtonState.Pressed || keyState.IsKeyDown(Keys.Left))
+			if (GamePad.GetState(PlayerIndex.One).DPad.Left == ButtonState.Pressed
+				|| keyState.IsKeyDown(Keys.Left)
+				|| keyState.IsKeyDown(Keys.A))
+				//_bxy.x = -1;
 				xinput = -1;
 			// <
-			if (GamePad.GetState(PlayerIndex.One).DPad.Right == ButtonState.Pressed || keyState.IsKeyDown(Keys.Right))
+			if (GamePad.GetState(PlayerIndex.One).DPad.Right == ButtonState.Pressed
+				|| keyState.IsKeyDown(Keys.Right)
+				|| keyState.IsKeyDown(Keys.D))
+				//_bxy.x = 1;
 				xinput = 1;
 			// v
-			if (GamePad.GetState(PlayerIndex.One).DPad.Up == ButtonState.Pressed || keyState.IsKeyDown(Keys.Up))
+			if (GamePad.GetState(PlayerIndex.One).DPad.Up == ButtonState.Pressed
+				|| keyState.IsKeyDown(Keys.Up)
+				|| keyState.IsKeyDown(Keys.W))
+				//_bxy.y = -1;
 				yinput = -1;
 			// ^
-			if (GamePad.GetState(PlayerIndex.One).DPad.Down == ButtonState.Pressed || keyState.IsKeyDown(Keys.Down))
+			if (GamePad.GetState(PlayerIndex.One).DPad.Down == ButtonState.Pressed
+				|| keyState.IsKeyDown(Keys.Down)
+				|| keyState.IsKeyDown(Keys.S))
+				//_bxy.y = 1;
 				yinput = 1;
 
-			if (xinput != 0 || yinput != 0)
+            // Send to server
+			// If there's input; send it to server
+            if (xinput != 0 || yinput != 0)
 			{
-				//
-				// If there's input; send it to server
-				//
-				NetOutgoingMessage om = client.CreateMessage();
-				om.Write(xinput); // very inefficient to send a full Int32 (4 bytes) but we'll use this for simplicity // What's a more efficient way ?
-				om.Write(yinput);
-				om.Write(x_byte);
-				client.SendMessage(om, NetDeliveryMethod.Unreliable);
+				NetOutgoingMessage outBox = client.CreateMessage();
+				outBox.Write(xinput); // very inefficient to send a full Int32 (4 bytes) but we'll use this for simplicity // What's a more efficient way ?
+				outBox.Write(yinput);
+				// om.Write(_bxy.x);
+				// om.Write(_bxy.y);
+				client.SendMessage(outBox, NetDeliveryMethod.Unreliable);
 			}
 
-			// read messages
-			NetIncomingMessage msg_in;
+			// Read Messages
+			NetIncomingMessage inBox;
 			// NetOutgoingMessage msg_out;
-			while ((msg_in = client.ReadMessage()) != null)
+			while ((inBox = client.ReadMessage()) != null)
 			{
-				switch (msg_in.MessageType)
+				switch (inBox.MessageType)
 				{
 					case NetIncomingMessageType.DiscoveryResponse:
 						// just connect to first server discovered
-						client.Connect(msg_in.SenderEndPoint);
+						client.Connect(inBox.SenderEndPoint);
 						break;
 					case NetIncomingMessageType.Data:
 						// server sent a position update
-						long who = msg_in.ReadInt64();
-						int x = msg_in.ReadInt32();
-						int y = msg_in.ReadInt32();
+						long who = inBox.ReadInt64();
+						int x = inBox.ReadInt32();
+						int y = inBox.ReadInt32();
+
 						positions[who] = new Vector2(x, y);
 						break;
 				}
@@ -137,8 +152,7 @@ namespace Client
 		{
 			GraphicsDevice.Clear(Color.CornflowerBlue);
 
-			_graphics.sb.Begin(SpriteSortMode.Texture, BlendState.AlphaBlend);
-
+			_graphics._sb.Begin(SpriteSortMode.Texture, BlendState.AlphaBlend);
 			// draw all players
 			foreach (var kvp in positions)
 			{
@@ -146,10 +160,9 @@ namespace Client
 				int num = Math.Abs((int)kvp.Key) % _textures.textures_list.Count;
 
 				// draw player
-				_graphics.sb.Draw(_textures.textures_list[num], kvp.Value, Color.White);
+				_graphics._sb.Draw(_textures.textures_list[num], kvp.Value, Color.White);
 			}
-
-			_graphics.sb.End();
+			_graphics._sb.End();
 
 			base.Draw(gameTime);
 		}

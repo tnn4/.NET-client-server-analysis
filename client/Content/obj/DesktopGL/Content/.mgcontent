@@ -4,17 +4,17 @@
   <Platform>DesktopGL</Platform>
   <Config />
   <SourceFiles>
-    <File>D:/projects/net/lidgren-client-server-sample/Client/Content/sprites/c1.png</File>
-    <File>D:/projects/net/lidgren-client-server-sample/Client/Content/sprites/c2.png</File>
-    <File>D:/projects/net/lidgren-client-server-sample/Client/Content/sprites/c3.png</File>
-    <File>D:/projects/net/lidgren-client-server-sample/Client/Content/sprites/c4.png</File>
-    <File>D:/projects/net/lidgren-client-server-sample/Client/Content/sprites/c5.png</File>
+    <File>D:/projects/net/lidgren-client-server-sample/Client/Content/sprites/characters/c1.png</File>
+    <File>D:/projects/net/lidgren-client-server-sample/Client/Content/sprites/characters/c2.png</File>
+    <File>D:/projects/net/lidgren-client-server-sample/Client/Content/sprites/characters/c3.png</File>
+    <File>D:/projects/net/lidgren-client-server-sample/Client/Content/sprites/characters/c4.png</File>
+    <File>D:/projects/net/lidgren-client-server-sample/Client/Content/sprites/characters/c5.png</File>
     <File>D:/projects/net/lidgren-client-server-sample/Client/Content/sprites/characters/player.png</File>
     <File>D:/projects/net/lidgren-client-server-sample/Client/Content/sprites/characters/slime.png</File>
+    <File>D:/projects/net/lidgren-client-server-sample/Client/Content/sprites/characters/square1.png</File>
     <File>D:/projects/net/lidgren-client-server-sample/Client/Content/sprites/objects/chest_01.png</File>
     <File>D:/projects/net/lidgren-client-server-sample/Client/Content/sprites/objects/objects.png</File>
     <File>D:/projects/net/lidgren-client-server-sample/Client/Content/sprites/particles/dust_particles_01.png</File>
-    <File>D:/projects/net/lidgren-client-server-sample/Client/Content/sprites/square1.png</File>
     <File>D:/projects/net/lidgren-client-server-sample/Client/Content/sprites/tilesets/decor_16x16.png</File>
     <File>D:/projects/net/lidgren-client-server-sample/Client/Content/sprites/tilesets/decor_8x8.png</File>
     <File>D:/projects/net/lidgren-client-server-sample/Client/Content/sprites/tilesets/fences.png</File>

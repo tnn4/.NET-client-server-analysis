@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PipelineBuildEvent xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-  <SourceFile>D:/projects/net/lidgren-client-server-sample/Client/Content/sprites/characters/slime.png</SourceFile>
+  <SourceFile>D:/projects/net/lidgren-client-server-sample/Client/Content/sprites/characters/c3.png</SourceFile>
   <SourceTime>2022-08-13T16:57:42-05:00</SourceTime>
-  <DestFile>D:/projects/net/lidgren-client-server-sample/Client/Content/bin/DesktopGL/Content/sprites/characters/slime.xnb</DestFile>
-  <DestTime>2022-08-24T21:41:40-05:00</DestTime>
+  <DestFile>D:/projects/net/lidgren-client-server-sample/Client/Content/bin/DesktopGL/Content/sprites/characters/c3.xnb</DestFile>
+  <DestTime>2022-08-24T21:45:50-05:00</DestTime>
   <Importer>TextureImporter</Importer>
   <ImporterTime>2020-08-10T11:17:54-05:00</ImporterTime>
   <Processor>TextureProcessor</Processor>
